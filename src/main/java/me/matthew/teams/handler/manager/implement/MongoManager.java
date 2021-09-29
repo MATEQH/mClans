@@ -7,10 +7,10 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import lombok.Getter;
-import me.matthew.teams.handler.Team;
-import me.matthew.teams.handler.TeamHandler;
+import me.matthew.teams.handler.team.Team;
+import me.matthew.teams.handler.team.TeamHandler;
 import me.matthew.teams.handler.manager.Manager;
-import me.matthew.teams.util.Config;
+import me.matthew.teams.handler.enums.Config;
 import org.bson.Document;
 import org.bukkit.plugin.Plugin;
 
@@ -40,25 +40,26 @@ public class MongoManager extends Manager {
     }
 
     @Override
-    public void save(Team team) {
-        super.save(team);
+    public Manager save(Team team) {
         String name = team.getName().toLowerCase();
         ForkJoinPool.commonPool().execute(() -> this.collection.updateOne(
                 Filters.eq("_id", name),
                 new Document("$set", Document.parse(gson.toJson(team, Team.class))),
                 new UpdateOptions().upsert(true)
         ));
+        return this;
     }
 
     @Override
-    public void remove(Team team) {
-        super.remove(team);
-        ForkJoinPool.commonPool().execute(() -> this.collection.deleteOne(Filters.eq("_id", team.getName().toLowerCase())));
+    public Manager remove(Team team) {
+        ForkJoinPool.commonPool().execute(() -> this.collection.deleteOne(
+                Filters.eq("_id", team.getName().toLowerCase())
+        ));
+        return this;
     }
 
     @Override
-    public void loadAll() {
-        super.loadAll();
+    public Manager loadAll() {
         CompletableFuture.supplyAsync(() -> {
             Map<String, Team> teams = new HashMap<>();
             for (Document document : this.collection.find()) {
@@ -73,14 +74,15 @@ public class MongoManager extends Manager {
             TeamHandler.sortTeams();
             return teams;
         });
+        return this;
     }
 
     @Override
-    public void saveAll() {
-        super.saveAll();
+    public Manager saveAll() {
         CompletableFuture.supplyAsync(() -> {
             TeamHandler.getTeamMap().values().forEach(team -> save(team));
             return TeamHandler.getTeamMap();
         });
+        return this;
     }
 }

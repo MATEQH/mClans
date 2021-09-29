@@ -1,7 +1,7 @@
 package me.matthew.teams.handler.manager.implement;
 
-import me.matthew.teams.handler.Team;
-import me.matthew.teams.handler.TeamHandler;
+import me.matthew.teams.handler.team.Team;
+import me.matthew.teams.handler.team.TeamHandler;
 import me.matthew.teams.handler.manager.Manager;
 import me.matthew.teams.util.FileUtil;
 import org.bukkit.plugin.Plugin;
@@ -22,20 +22,19 @@ public class FlatFileManager extends Manager {
     }
 
     @Override
-    public void save(Team team) {
-        super.save(team);
+    public Manager save(Team team) {
         saveAll();
+        return this;
     }
 
     @Override
-    public void remove(Team team) {
-        super.remove(team);
+    public Manager remove(Team team) {
         ForkJoinPool.commonPool().execute(() -> FileUtil.writeContent(this.file, gson.toJson(TeamHandler.getTeamMap(), typeToken)));
+        return this;
     }
 
     @Override
-    public void loadAll() {
-        super.loadAll();
+    public Manager loadAll() {
         CompletableFuture.supplyAsync(() -> {
             Map<String, Team> teamMap = gson.fromJson(FileUtil.readContent(this.file), typeToken);
             if (teamMap == null || teamMap.isEmpty()) {
@@ -49,12 +48,13 @@ public class FlatFileManager extends Manager {
             TeamHandler.sortTeams();
             return teamMap;
         });
+        return this;
     }
 
     @Override
-    public void saveAll() {
-        super.saveAll();
+    public Manager saveAll() {
         CompletableFuture.supplyAsync(() -> FileUtil.writeContent(this.file, gson.toJson(TeamHandler.getTeamMap(), typeToken)));
+        return this;
     }
 
 //    @Override

@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import lombok.Setter;
 import me.matthew.teams.util.BukkitUtil;
-import me.matthew.teams.util.Messages;
+import me.matthew.teams.handler.enums.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

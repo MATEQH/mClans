@@ -4,7 +4,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
-import me.matthew.teams.handler.Team;
+import me.matthew.teams.handler.team.Team;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Type;
@@ -23,8 +23,8 @@ public abstract class Manager {
         this.plugin = plugin;
     }
 
-    public void save(Team team) {}
-    public void remove(Team team) {}
-    public void loadAll() {}
-    public void saveAll() {}
+    public abstract Manager save(Team team);
+    public abstract Manager remove(Team team);
+    public abstract Manager loadAll();
+    public abstract Manager saveAll();
 }

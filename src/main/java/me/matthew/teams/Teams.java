@@ -1,16 +1,16 @@
 package me.matthew.teams;
 
 import lombok.Getter;
-import me.matthew.teams.command.TeamExecutor;
-import me.matthew.teams.handler.PlayerListener;
-import me.matthew.teams.handler.TeamHandler;
-import me.matthew.teams.handler.TeamExpansion;
-import me.matthew.teams.handler.manager.ManagerType;
-import me.matthew.teams.handler.manager.implement.FlatFileManager;
-import me.matthew.teams.handler.manager.implement.MongoManager;
-import me.matthew.teams.util.Config;
-import me.matthew.teams.util.PlayerCache;
+import me.matthew.teams.command.implement.team.TeamExecutor;
+import me.matthew.teams.handler.manager.Manager;
+import me.matthew.teams.listener.PlayerListener;
+import me.matthew.teams.handler.team.TeamHandler;
+import me.matthew.teams.handler.team.TeamExpansion;
+import me.matthew.teams.handler.enums.ManagerType;
+import me.matthew.teams.handler.enums.Config;
 import me.matthew.teams.util.YamlFile;
+import me.matthew.teams.handler.cache.NameCache;
+import me.matthew.teams.handler.cache.implement.BukkitCache;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -23,6 +23,10 @@ public class Teams extends JavaPlugin {
     @Getter
     private YamlFile configFile, messagesFile;
     @Getter
+    private NameCache nameCache;
+    @Getter
+    private Manager manager;
+    @Getter
     private Economy economy;
 
     @Override
@@ -30,16 +34,10 @@ public class Teams extends JavaPlugin {
         instance = this;
         configFile = new YamlFile(this, "config.yml").loadConfig(true);
         messagesFile = new YamlFile(this, "messages.yml").loadConfig(true);
-        setupEconomy();
-        PlayerCache.init();
-        ManagerType managerType = ManagerType.valueOf(Config.getString(Config.DATABASE_TYPE));
-        if (managerType == ManagerType.MONGO) {
-            TeamHandler.init(new MongoManager(this));
-        } else {
-            TeamHandler.init(new FlatFileManager(this));
-        }
-        System.out.println("[" + getName() + "] " + "Using " + TeamHandler.getManager().getClass().getSimpleName() + " manager.");
-        TeamHandler.getManager().loadAll();
+        nameCache = new BukkitCache().init();
+        manager = ManagerType.getManager(ManagerType.valueOf(Config.getString(Config.DATABASE_TYPE)), this).loadAll();
+        TeamHandler.init(manager);
+        economy = setupEconomy();
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
         new TeamExecutor("team").register();
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
@@ -52,15 +50,14 @@ public class Teams extends JavaPlugin {
 
     }
 
-    private boolean setupEconomy() {
+    private Economy setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
+            return null;
         }
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
-            return false;
+            return null;
         }
-        economy = rsp.getProvider();
-        return economy != null;
+        return rsp.getProvider();
     }
 }

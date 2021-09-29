@@ -1,7 +1,7 @@
 package me.matthew.teams.command;
 
 import lombok.Getter;
-import me.matthew.teams.handler.Role;
+import me.matthew.teams.handler.enums.Role;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
