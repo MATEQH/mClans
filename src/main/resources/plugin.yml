@@ -1,0 +1,10 @@
+name: mTeams
+version: 0.1
+author: Matthew
+main: me.matthew.teams.Teams
+softdepend:
+  - Vault
+  - PlaceholderAPI
+commands:
+  team:
+    aliases: [t, clan]
