@@ -1,10 +1,10 @@
-name: mTeams
+name: mClans
 version: 0.1
 author: Matthew
-main: me.matthew.teams.Teams
+main: com.github.mateqh.clans.Clans
 softdepend:
   - Vault
   - PlaceholderAPI
 commands:
-  team:
-    aliases: [t, clan]
+  clan:
+    aliases: [clan]
