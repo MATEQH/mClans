@@ -5,6 +5,7 @@ main: com.github.mateqh.clans.Clans
 softdepend:
   - Vault
   - PlaceholderAPI
+  - LunarClient-API
 commands:
   clan:
-    aliases: [clan]
+    aliases: [team]
