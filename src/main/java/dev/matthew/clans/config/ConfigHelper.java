@@ -1,7 +1,6 @@
 package dev.matthew.clans.config;
 
 import dev.matthew.clans.config.resolver.ValueResolver;
-import com.github.mateqh.config.resolver.implement.*;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
@@ -14,8 +13,8 @@ import java.util.Map;
 
 public class ConfigHelper {
 
-    private static Map<Type, ValueResolver<?>> resolverMap = Maps.newConcurrentMap();
-    private static Table<Class<?>, Class<?>, ValueResolver<?>> resolverTable = HashBasedTable.create();
+    private static final Map<Type, ValueResolver<?>> resolverMap = Maps.newConcurrentMap();
+    private static final Table<Class<?>, Class<?>, ValueResolver<?>> resolverTable = HashBasedTable.create();
 
     static {
         resolverMap.put(String.class, new StringResolver());

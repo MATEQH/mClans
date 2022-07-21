@@ -3,7 +3,6 @@ package dev.matthew.clans.clans.command.implement.clan;
 import dev.matthew.clans.clans.Clans;
 import dev.matthew.clans.clans.command.ArgumentExecutor;
 import dev.matthew.clans.clans.command.ExecutorArgument;
-import com.github.mateqh.clans.command.implement.clan.argument.*;
 import dev.matthew.clans.clans.command.implement.clan.argument.*;
 import dev.matthew.clans.clans.handler.clan.Clan;
 import dev.matthew.clans.clans.handler.file.Message;
@@ -57,7 +56,7 @@ public class ClanExecutor extends ArgumentExecutor {
             return true;
         }
         ExecutorArgument argument = getArgument(args[0]);
-        if (argument != null && argument.getPermission() == null || sender.hasPermission(argument.getPermission())) {
+        if (argument != null && (argument.getPermission() == null || !sender.hasPermission(argument.getPermission()))) {
             argument.onCommand(sender, command, label, args);
             return true;
         }
