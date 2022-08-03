@@ -1,7 +1,7 @@
 name: mClans
-version: 0.1
+version: 0.1.1-pre2
 author: Matthew
-main: com.github.mateqh.clans.Clans
+main: dev.matthew.clans.Clans
 softdepend:
   - Vault
   - PlaceholderAPI
