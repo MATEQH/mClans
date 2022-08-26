@@ -18,6 +18,7 @@ public class Clan implements ClassSerializer {
     private int kills = 0, points = 0;
     private double balance = 0;
     private final Map<UUID, Long> invitedPlayers = new HashMap<>();
+    private boolean teamFire = false;
 
     public Clan(String name, UUID leader) {
         this.name = name;
@@ -35,6 +36,7 @@ public class Clan implements ClassSerializer {
         this.kills = document.getInteger("kills");
         this.points = document.getInteger("points");
         this.balance = document.getDouble("balance");
+        this.teamFire = document.getBoolean("teamFire", false);
     }
 
     @Override
@@ -48,6 +50,7 @@ public class Clan implements ClassSerializer {
         document.put("kills", kills);
         document.put("points", points);
         document.put("balance", balance);
+        document.put("teamFire", teamFire);
         return document;
     }
 
@@ -144,6 +147,10 @@ public class Clan implements ClassSerializer {
 
     public double getBalance() {
         return balance;
+    }
+
+    public boolean isTeamFire() {
+        return teamFire;
     }
 
     public Map<UUID, Long> getInvitedPlayers() {

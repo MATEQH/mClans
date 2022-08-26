@@ -3,6 +3,7 @@ package dev.matthew.clans;
 import dev.matthew.clans.enums.ManagerType;
 import dev.matthew.clans.file.Config;
 import dev.matthew.clans.file.Message;
+import dev.matthew.clans.util.PluginHook;
 import dev.matthew.config.ConfigFile;
 import lombok.Getter;
 import dev.matthew.clans.command.implement.clan.ClanExecutor;
@@ -40,6 +41,7 @@ public class Clans extends JavaPlugin {
         economy = setupEconomy();
         ClanHandler.init(ManagerType.getManager(Config.DATABASE.TYPE, this));
         PluginManager pluginManager = Bukkit.getPluginManager();
+        PluginHook.init(pluginManager);
         pluginManager.registerEvents(new PlayerListener(), this);
         if (pluginManager.isPluginEnabled("PlaceholderAPI")) {
             getLogger().info("PlaceholderAPI found! Registering expansions.");

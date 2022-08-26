@@ -3,7 +3,9 @@ package dev.matthew.clans.listener;
 import dev.matthew.clans.clan.Clan;
 import dev.matthew.clans.clan.ClanHandler;
 import dev.matthew.clans.file.Config;
+import dev.matthew.clans.util.PluginHook;
 import dev.matthew.clans.util.StringUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -14,6 +16,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class PlayerListener implements Listener {
+
+
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
@@ -64,6 +68,12 @@ public class PlayerListener implements Listener {
             Player damager = (Player) projectile.getShooter();
             Clan damagerClan = ClanHandler.getByPlayer(damager);
             if (!targetClan.equals(damagerClan)) {
+                return;
+            }
+            if (targetClan.isTeamFire()) {
+                return;
+            }
+            if (PluginHook.DUELS != null && PluginHook.DUELS.getArenaManager().isInMatch(damager)) {
                 return;
             }
             event.setCancelled(true);
