@@ -1,5 +1,5 @@
 name: mClans
-version: SNAPSHOT-0.1.2
+version: 0.1.2-SNAPSHOT
 author: Matthew
 main: dev.matthew.clans.Clans
 softdepend:

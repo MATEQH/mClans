@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.github.mateqh.clans</groupId>
+  <groupId>dev.matthew.clans</groupId>
   <artifactId>mClans</artifactId>
   <version>0.1</version>
   <build>
@@ -29,7 +29,7 @@
   </build>
   <repositories>
     <repository>
-      <id>jitpack.io</id>
+      <id>jitpack-repo</id>
       <url>https://jitpack.io</url>
     </repository>
     <repository>
@@ -47,7 +47,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.20</version>
+      <version>1.18.24</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -69,6 +69,13 @@
       <version>2.11.1</version>
       <scope>system</scope>
       <systemPath>${basedir}/lib/PlaceholderAPI-2.11.1.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.github.Realizedd.Duels</groupId>
+      <artifactId>duels</artifactId>
+      <version>3.5.1</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/Duels-3.5.2.jar</systemPath>
     </dependency>
   </dependencies>
   <properties>
