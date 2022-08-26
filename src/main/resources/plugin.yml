@@ -1,11 +1,12 @@
 name: mClans
-version: 0.1.1-pre2
+version: SNAPSHOT-0.1.2
 author: Matthew
 main: dev.matthew.clans.Clans
 softdepend:
   - Vault
   - PlaceholderAPI
   - LunarClient-API
+  - Duels
 commands:
   clan:
     aliases: [team]
