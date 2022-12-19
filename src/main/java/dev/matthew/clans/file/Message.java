@@ -61,6 +61,7 @@ public class Message {
     public static String CANNOT_DO_THIS_YOURSELF = "&cYou can't do this with yourself.";
     @ConfigPath(path = "PLAYER_NOT_FOUND")
     public static String PLAYER_NOT_FOUND = "&cPlayer %targetName% is not found.";
+    @ConfigPath(path = "HELP_COMMAND")
     public static List<String> HELP_COMMAND = Arrays.asList(
             "",
             "&6&lClan help",
