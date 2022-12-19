@@ -2,6 +2,7 @@ package dev.matthew.clans.listener;
 
 import dev.matthew.clans.clan.Clan;
 import dev.matthew.clans.clan.ClanHandler;
+import dev.matthew.clans.event.implement.HitTeammateEvent;
 import dev.matthew.clans.file.Config;
 import dev.matthew.clans.util.PluginHook;
 import dev.matthew.clans.util.StringUtil;
@@ -16,8 +17,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class PlayerListener implements Listener {
-
-
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
@@ -59,6 +58,17 @@ public class PlayerListener implements Listener {
             if (!targetClan.equals(damagerClan)) {
                 return;
             }
+            if (targetClan.isTeamFire()) {
+                return;
+            }
+            if (PluginHook.DUELS != null && PluginHook.DUELS.getArenaManager().isInMatch(damager)) {
+                return;
+            }
+            HitTeammateEvent hitTeammateEvent = new HitTeammateEvent(damager, target, damagerClan, targetClan);
+            Bukkit.getPluginManager().callEvent(hitTeammateEvent);
+            if (hitTeammateEvent.isAllowHit()) {
+                return;
+            }
             event.setCancelled(true);
         } else if (event.getDamager() instanceof Projectile) {
             Projectile projectile = (Projectile) event.getDamager();
@@ -74,6 +84,11 @@ public class PlayerListener implements Listener {
                 return;
             }
             if (PluginHook.DUELS != null && PluginHook.DUELS.getArenaManager().isInMatch(damager)) {
+                return;
+            }
+            HitTeammateEvent hitTeammateEvent = new HitTeammateEvent(damager, target, damagerClan, targetClan);
+            Bukkit.getPluginManager().callEvent(hitTeammateEvent);
+            if (hitTeammateEvent.isAllowHit()) {
                 return;
             }
             event.setCancelled(true);
