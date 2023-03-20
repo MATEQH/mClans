@@ -42,6 +42,8 @@ public class Config {
     public static boolean BROADCAST_CREATE = true;
     @ConfigPath(path = "BROADCAST_DISBAND")
     public static boolean BROADCAST_DISBAND = true;
+    @ConfigPath(path = "BROADCAST_RENAME")
+    public static boolean BROADCAST_RENAME = true;
 
     public static class CLAN {
 

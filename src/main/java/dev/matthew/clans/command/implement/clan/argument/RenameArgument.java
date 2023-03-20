@@ -1,8 +1,8 @@
 package dev.matthew.clans.command.implement.clan.argument;
 
-import dev.matthew.clans.command.ExecutorArgument;
 import dev.matthew.clans.clan.Clan;
 import dev.matthew.clans.clan.ClanHandler;
+import dev.matthew.clans.command.ExecutorArgument;
 import dev.matthew.clans.enums.Role;
 import dev.matthew.clans.file.Config;
 import dev.matthew.clans.file.Message;
@@ -13,9 +13,9 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.List;
 
-public class DisbandArgument extends ExecutorArgument {
+public class RenameArgument extends ExecutorArgument {
 
-    public DisbandArgument(String name) {
+    public RenameArgument(String name) {
         super(name, "mclans.use");
     }
 
@@ -40,17 +40,22 @@ public class DisbandArgument extends ExecutorArgument {
             Message.send(player, Message.MUST_BE_LEADER);
             return true;
         }
-        ClanHandler.removeClan(clan);
-        if (Config.BROADCAST_DISBAND) {
-            Message.sendGlobal(Message.DISBAND_COMMAND.DISBANDED
+        if (args.length != 2) {
+            Message.send(sender, Message.RENAME_COMMAND.USAGE.replaceAll("%label%", label));
+            return true;
+        }
+        String oldName = clan.getName();
+        ClanHandler.renameClan(clan, args[1]);
+        if (Config.BROADCAST_RENAME) {
+            Message.sendGlobal(Message.RENAME_COMMAND.RENAMED
+                    .replaceAll("%oldName%", oldName)
                     .replaceAll("%name%", clan.getName())
-                    .replaceAll("%playerName%", player.getName())
-            );
+                    .replaceAll("%playerName%", player.getName()));
         } else {
-            Message.send(player, Message.DISBAND_COMMAND.DISBANDED
+            Message.send(player, Message.RENAME_COMMAND.RENAMED
+                    .replaceAll("%oldName%", oldName)
                     .replaceAll("%name%", clan.getName())
-                    .replaceAll("%playerName%", player.getName())
-            );
+                    .replaceAll("%playerName%", player.getName()));
         }
         return true;
     }

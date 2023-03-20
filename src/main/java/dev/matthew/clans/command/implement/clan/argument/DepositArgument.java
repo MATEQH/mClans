@@ -1,12 +1,12 @@
 package dev.matthew.clans.command.implement.clan.argument;
 
-import dev.matthew.clans.Clans;
 import dev.matthew.clans.command.ExecutorArgument;
 import dev.matthew.clans.clan.Clan;
 import dev.matthew.clans.clan.ClanHandler;
 import dev.matthew.clans.enums.Role;
 import dev.matthew.clans.file.Message;
 import dev.matthew.clans.util.NumberUtil;
+import dev.matthew.clans.util.hook.VaultHook;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -38,11 +38,11 @@ public class DepositArgument extends ExecutorArgument {
             Message.send(player, Message.NOT_IN_CLAN_SELF);
             return true;
         }
-        if (Clans.getInstance().getEconomy() == null) {
+        if (VaultHook.ECONOMY == null) {
             Message.send(player, Message.VAULT_NOT_FOUND);
             return true;
         }
-        Economy economy = Clans.getInstance().getEconomy();
+        Economy economy = VaultHook.ECONOMY;
         if (args.length != 2) {
             Message.send(player, Message.DEPOSIT_COMMAND.USAGE.replaceAll("%label%", label));
             return true;

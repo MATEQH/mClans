@@ -83,7 +83,7 @@ public class SqlManager extends Manager {
             while (resultSet.next()) {
                 String data = resultSet.getString(2);
                 Clan clan = new Clan(Document.parse(data));
-                ClanHandler.getClanMap().put(clan.getName().toLowerCase(), clan);
+                ClanHandler.getClanMap().put(clan.getId(), clan);
                 clan.getMembers().keySet().forEach(uuid -> ClanHandler.getPlayerMap().put(uuid, clan));
             }
             resultSet.close();

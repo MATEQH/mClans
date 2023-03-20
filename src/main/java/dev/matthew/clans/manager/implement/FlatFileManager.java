@@ -45,7 +45,7 @@ public class FlatFileManager extends Manager {
             if (path.exists() && path.listFiles() != null) {
                 Arrays.stream(path.listFiles()).forEach(file -> {
                     Clan clan = new Clan(Document.parse(FileUtil.readContent(file)));
-                    ClanHandler.getClanMap().put(clan.getName().toLowerCase(), clan);
+                    ClanHandler.getClanMap().put(clan.getId(), clan);
                     clan.getMembers().keySet().forEach(uuid -> ClanHandler.getPlayerMap().put(uuid, clan));
                 });
             }

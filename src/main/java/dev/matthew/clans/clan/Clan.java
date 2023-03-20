@@ -13,19 +13,23 @@ import java.util.stream.Collectors;
 
 public class Clan implements ClassSerializer {
 
-    private final String name;
+    private final UUID id;
+    private String name;
     private Map<UUID, Role> members = new HashMap<>();
     private int kills = 0, points = 0;
     private double balance = 0;
     private final Map<UUID, Long> invitedPlayers = new HashMap<>();
     private boolean teamFire = false;
+    private long lastRename = -1L;
 
-    public Clan(String name, UUID leader) {
+    public Clan(UUID id, String name, UUID leader) {
+        this.id = id;
         this.name = name;
         this.members.put(leader, Role.LEADER);
     }
 
     public Clan(Document document) {
+        this.id = UUID.fromString(document.getString("_id"));
         this.name = document.getString("name");
         this.members.clear();
         Document membersDocument = document.get("members", Document.class);
@@ -37,6 +41,7 @@ public class Clan implements ClassSerializer {
         this.points = document.getInteger("points");
         this.balance = document.getDouble("balance");
         this.teamFire = document.getBoolean("teamFire", false);
+        this.lastRename = document.get("lastRename", -1L);
     }
 
     @Override
@@ -51,7 +56,12 @@ public class Clan implements ClassSerializer {
         document.put("points", points);
         document.put("balance", balance);
         document.put("teamFire", teamFire);
+        document.put("lastRename", lastRename);
         return document;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public UUID getLeader() {
@@ -125,6 +135,10 @@ public class Clan implements ClassSerializer {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Map<UUID, Role> getMembers() {
         return members;
     }
@@ -155,5 +169,13 @@ public class Clan implements ClassSerializer {
 
     public Map<UUID, Long> getInvitedPlayers() {
         return invitedPlayers;
+    }
+
+    public long getLastRename() {
+        return lastRename;
+    }
+
+    public void setLastRename(long lastRename) {
+        this.lastRename = lastRename;
     }
 }

@@ -10,10 +10,8 @@ import dev.matthew.clans.command.implement.clan.ClanExecutor;
 import dev.matthew.clans.clan.ClanExpansion;
 import dev.matthew.clans.clan.ClanHandler;
 import dev.matthew.clans.listener.PlayerListener;
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Clans extends JavaPlugin {
@@ -22,8 +20,6 @@ public class Clans extends JavaPlugin {
     private static Clans instance;
     @Getter
     private ConfigFile configFile, messagesFile;
-    @Getter
-    private Economy economy;
 
     @Override
     public void onEnable() {
@@ -38,7 +34,6 @@ public class Clans extends JavaPlugin {
                 .export()
                 .loadConfig()
                 .setAnnotatedFields();
-        economy = setupEconomy();
         ClanHandler.init(ManagerType.getManager(Config.DATABASE.TYPE, this));
         PluginManager pluginManager = Bukkit.getPluginManager();
         PluginHook.init(pluginManager);
@@ -56,13 +51,5 @@ public class Clans extends JavaPlugin {
     @Override
     public void onDisable() {
         ClanHandler.getManager().close();
-    }
-
-    private Economy setupEconomy() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return null;
-        }
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        return rsp == null ? null : rsp.getProvider();
     }
 }

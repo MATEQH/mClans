@@ -93,6 +93,14 @@ public class Message {
     @ConfigPath(path = "COMMAND_ONLY_FOR_PLAYERS")
     public static String COMMAND_ONLY_FOR_PLAYERS = "&cThis command is only for players.";
 
+    public static class FORCE_DISBAND_COMMAND {
+
+        @ConfigPath(path = "FORCE_DISBAND_COMMAND.USAGE")
+        public static String USAGE = "&cUsage: /%label% forcedisband <name>";
+        @ConfigPath(path = "FORCE_DISBAND_COMMAND.DISBANDED")
+        public static String DISBANDED = "&eClan %name% was disbanded by %playerName%.";
+    }
+
     public static class CAPTAINS_COMMAND {
 
         @ConfigPath(path = "CAPTAINS_COMMAND.USAGE")
@@ -254,6 +262,14 @@ public class Message {
         );
     }
 
+    public static class RENAME_COMMAND {
+
+        @ConfigPath(path = "RENAME_COMMAND.USAGE")
+        public static String USAGE = "&cUsage: /%label% rename <name>";
+        @ConfigPath(path = "RENAME_COMMAND.RENAMED")
+        public static String RENAMED = "&eClan %oldName% renamed to %name% by %playerName%.";
+    }
+
     public static class TOP_COMMAND {
 
         @ConfigPath(path = "TOP_COMMAND.NO_CLANS")
@@ -288,7 +304,7 @@ public class Message {
         @ConfigPath(path = "WITHDRAW_COMMAND.USAGE")
         public static String USAGE = "&cUsage: /%label% withdraw <amount>";
         @ConfigPath(path = "WITHDRAW_COMMAND.CAN_NOT_DEPOSIT_ZERO")
-        public static String CAN_NOT_DEPOSIT_ZERO = "&eYou cannot deposit $0.";
+        public static String CAN_NOT_ZERO = "&eYou cannot deposit $0.";
         @ConfigPath(path = "WITHDRAW_COMMAND.NOT_ENOUGH_MONEY")
         public static String NOT_ENOUGH_MONEY = "&eYour clan only has $%amount%.";
         @ConfigPath(path = "WITHDRAW_COMMAND.WITHDRAWN")

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class ClanHandler {
 
     @Getter
-    private static final Map<String, Clan> clanMap = new HashMap<>();
+    private static final Map<UUID, Clan> clanMap = new HashMap<>();
     @Getter
     private static final Map<UUID, Clan> playerMap = new HashMap<>();
     @Getter
@@ -25,7 +25,15 @@ public class ClanHandler {
     }
 
     public static Clan getByName(String name) {
-        return clanMap.get(name.toLowerCase());
+        return clanMap.values().stream().filter(clan -> clan.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+
+    public static Clan getById(UUID id) {
+        return clanMap.get(id);
+    }
+
+    public static UUID getIdByName(String name) {
+        return getByName(name).getId();
     }
 
     public static Clan getByUniqueId(UUID uniqueId) {
@@ -36,22 +44,30 @@ public class ClanHandler {
         return player == null ? null : getByUniqueId(player.getUniqueId());
     }
 
-    public static void createClan(Clan clan) {
-        String name = clan.getName().toLowerCase();
-        if (clanMap.containsKey(name)) {
-            return;
+    public static void createClan(String name, UUID leader) {
+        UUID id = UUID.randomUUID();
+        while (clanMap.containsKey(id)) {
+            id = UUID.randomUUID();
         }
-        clanMap.put(name, clan);
+        Clan clan = new Clan(id, name, leader);
+        clanMap.put(id, clan);
         clan.getMembers().keySet().forEach(uuid -> playerMap.put(uuid, clan));
         save(clan);
     }
 
-    public static void removeClan(Clan clan) {
-        String name = clan.getName().toLowerCase();
-        if (!clanMap.containsKey(name)) {
+    public static void renameClan(Clan clan, String newName) {
+        if (!clanMap.containsKey(clan.getId())) {
             return;
         }
-        clanMap.remove(name);
+        clan.setName(newName);
+        save(clan);
+    }
+
+    public static void removeClan(Clan clan) {
+        if (!clanMap.containsKey(clan.getId())) {
+            return;
+        }
+        clanMap.remove(clan.getId());
         clan.getMembers().keySet().forEach(uuid -> playerMap.put(uuid, null));
         remove(clan);
     }

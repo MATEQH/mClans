@@ -5,9 +5,11 @@ import dev.matthew.clans.command.ArgumentExecutor;
 import dev.matthew.clans.command.ExecutorArgument;
 import dev.matthew.clans.command.implement.clan.argument.*;
 import dev.matthew.clans.clan.Clan;
+import dev.matthew.clans.command.implement.clan.argument.staff.ForceDisbandArgument;
 import dev.matthew.clans.file.Message;
 import dev.matthew.clans.util.BukkitUtil;
 import dev.matthew.clans.clan.ClanHandler;
+import dev.matthew.clans.util.hook.VaultHook;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -24,6 +26,7 @@ public class ClanExecutor extends ArgumentExecutor {
 
     public ClanExecutor(String label) {
         super(label, "mclans.use");
+        addArgument(new ForceDisbandArgument("forcedisband"));
         addArgument(new CaptainsArgument("captains"));
         addArgument(new CreateArgument("create"));
         addArgument(new DisbandArgument("disband"));
@@ -36,9 +39,10 @@ public class ClanExecutor extends ArgumentExecutor {
         addArgument(new LeaderArgument("leader"));
         addArgument(new LeaveArgument("leave"));
         addArgument(new ListArgument("list"));
+        addArgument(new RenameArgument("rename"));
         addArgument(new TopArgument("top"));
         addArgument(new UninviteArgument("uninvite"));
-        if (Clans.getInstance().getEconomy() == null) {
+        if (VaultHook.ECONOMY == null) {
             Bukkit.getLogger().warning("[" + Clans.getInstance().getName() + "] " + Message.VAULT_NOT_FOUND);
             return;
         }

@@ -6,6 +6,7 @@ import dev.matthew.clans.event.implement.HitTeammateEvent;
 import dev.matthew.clans.file.Config;
 import dev.matthew.clans.util.PluginHook;
 import dev.matthew.clans.util.StringUtil;
+import dev.matthew.clans.util.hook.DuelsHook;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -61,7 +62,7 @@ public class PlayerListener implements Listener {
             if (targetClan.isTeamFire()) {
                 return;
             }
-            if (PluginHook.DUELS != null && PluginHook.DUELS.getArenaManager().isInMatch(damager)) {
+            if (DuelsHook.DUELS != null && DuelsHook.DUELS.getArenaManager().isInMatch(damager)) {
                 return;
             }
             HitTeammateEvent hitTeammateEvent = new HitTeammateEvent(damager, target, damagerClan, targetClan);
@@ -83,7 +84,7 @@ public class PlayerListener implements Listener {
             if (targetClan.isTeamFire()) {
                 return;
             }
-            if (PluginHook.DUELS != null && PluginHook.DUELS.getArenaManager().isInMatch(damager)) {
+            if (DuelsHook.DUELS != null && DuelsHook.DUELS.getArenaManager().isInMatch(damager)) {
                 return;
             }
             HitTeammateEvent hitTeammateEvent = new HitTeammateEvent(damager, target, damagerClan, targetClan);

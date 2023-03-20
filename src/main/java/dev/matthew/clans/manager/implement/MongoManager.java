@@ -46,7 +46,7 @@ public class MongoManager extends Manager {
     @Override
     public Manager save(Clan clan) {
         ForkJoinPool.commonPool().execute(() -> this.collection.updateOne(
-                Filters.eq("_id", clan.getName().toLowerCase()),
+                Filters.eq("_id", clan.getId().toString()),
                 new Document("$set", clan.serialize()),
                 new UpdateOptions().upsert(true)
         ));
@@ -56,7 +56,7 @@ public class MongoManager extends Manager {
     @Override
     public Manager remove(Clan clan) {
         ForkJoinPool.commonPool().execute(() -> this.collection.deleteOne(
-                Filters.eq("_id", clan.getName().toLowerCase())
+                Filters.eq("_id", clan.getId().toString())
         ));
         return this;
     }
@@ -66,7 +66,7 @@ public class MongoManager extends Manager {
         CompletableFuture.supplyAsync(() -> {
             for (Document document : this.collection.find()) {
                 Clan clan = new Clan(document);
-                ClanHandler.getClanMap().put(clan.getName().toLowerCase(), clan);
+                ClanHandler.getClanMap().put(clan.getId(), clan);
                 clan.getMembers().keySet().forEach(uuid -> ClanHandler.getPlayerMap().put(uuid, clan));
             }
             return null;
@@ -78,7 +78,7 @@ public class MongoManager extends Manager {
     public Manager saveAll() {
         CompletableFuture.supplyAsync(() -> {
             ClanHandler.getClanMap().values().forEach(clan -> this.collection.updateOne(
-                    Filters.eq("_id", clan.getName().toLowerCase()),
+                    Filters.eq("_id", clan.getId().toString()),
                     new Document("$set", clan.serialize()),
                     new UpdateOptions().upsert(true)
             ));

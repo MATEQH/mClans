@@ -63,8 +63,7 @@ public class CreateArgument extends ExecutorArgument {
             Message.send(player, Message.CLAN_ALREADY_EXISTS.replaceAll("%name%", name));
             return true;
         }
-        clan = new Clan(name, player.getUniqueId());
-        ClanHandler.createClan(clan);
+        ClanHandler.createClan(name, player.getUniqueId());
         if (Config.BROADCAST_CREATE) {
             Message.sendGlobal(Message.CREATE_COMMAND.CREATED.replaceAll("%name%", args[1]).replaceAll("%playerName%", player.getName()));
         } else {

@@ -42,12 +42,12 @@ public class InviteArgument extends ExecutorArgument {
             Message.send(player, Message.NOT_IN_CLAN_SELF);
             return true;
         }
-        if (args.length != 2) {
-            Message.send(player, Message.INVITE_COMMAND.USAGE.replaceAll("%label%", label));
-            return true;
-        }
         if (clan.getRole(player) != Role.LEADER && clan.getRole(player) != Role.CAPTAIN) {
             Message.send(player, Message.CLAN_NO_PERMISSION.replaceAll("%role%", "captain or leader"));
+            return true;
+        }
+        if (args.length != 2) {
+            Message.send(player, Message.INVITE_COMMAND.USAGE.replaceAll("%label%", label));
             return true;
         }
         if (clan.getMembers().size() >= Config.CLAN.MAX_SIZE) {

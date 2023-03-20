@@ -1,12 +1,12 @@
 package dev.matthew.clans.command.implement.clan.argument;
 
-import dev.matthew.clans.Clans;
 import dev.matthew.clans.enums.Role;
 import dev.matthew.clans.clan.Clan;
 import dev.matthew.clans.command.ExecutorArgument;
 import dev.matthew.clans.clan.ClanHandler;
 import dev.matthew.clans.file.Message;
 import dev.matthew.clans.util.NumberUtil;
+import dev.matthew.clans.util.hook.VaultHook;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -42,17 +42,17 @@ public class WithdrawArgument extends ExecutorArgument {
             Message.send(player, Message.WITHDRAW_COMMAND.USAGE.replaceAll("%label%", label));
             return true;
         }
-        if (Clans.getInstance().getEconomy() == null) {
-            Message.send(player, Message.VAULT_NOT_FOUND);
-            return true;
-        }
+//        if (VaultHook.ECONOMY == null) {
+//            Message.send(player, Message.VAULT_NOT_FOUND);
+//            return true;
+//        }
         if (NumberUtil.isDouble(args[1])) {
             double amount = Double.parseDouble(args[1]);
             if (amount <= 0) {
-                Message.send(player, Message.WITHDRAW_COMMAND.CAN_NOT_DEPOSIT_ZERO);
+                Message.send(player, Message.WITHDRAW_COMMAND.CAN_NOT_ZERO);
                 return true;
             }
-            Economy economy = Clans.getInstance().getEconomy();
+            Economy economy = VaultHook.ECONOMY;
             if (amount > clan.getBalance()) {
                 Message.send(player, Message.WITHDRAW_COMMAND.NOT_ENOUGH_MONEY);
                 return true;
