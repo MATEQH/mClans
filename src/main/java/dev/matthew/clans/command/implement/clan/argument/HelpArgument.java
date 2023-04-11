@@ -6,7 +6,6 @@ import dev.matthew.clans.file.Message;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import java.util.Collections;
 import java.util.List;
 
 public class HelpArgument extends ExecutorArgument {
@@ -17,7 +16,7 @@ public class HelpArgument extends ExecutorArgument {
 
     @Override
     public List<Role> getRoles() {
-        return Collections.emptyList();
+        return null;
     }
 
     @Override

@@ -10,6 +10,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class JoinArgument extends ExecutorArgument {
@@ -20,7 +22,7 @@ public class JoinArgument extends ExecutorArgument {
 
     @Override
     public List<Role> getRoles() {
-        return null;
+        return Collections.singletonList(Role.NONE);
     }
 
     @Override
@@ -44,6 +46,15 @@ public class JoinArgument extends ExecutorArgument {
             Message.send(player, Message.CLAN_DOES_NOT_EXISTS);
             return true;
         }
+        clan.getInvitedPlayers().entrySet().removeIf(entry -> entry.getValue() < System.currentTimeMillis());
+        if (player.hasPermission("mclans.staff")) {
+            if (clan.invited(player)) clan.getInvitedPlayers().remove(player.getUniqueId());
+            clan.getMembers().put(player.getUniqueId(), Role.MEMBER);
+            ClanHandler.getPlayerMap().put(player.getUniqueId(), clan);
+            ClanHandler.save(clan);
+            clan.sendColoredMessage(Message.JOIN_COMMAND.JOINED.replaceAll("%playerName%", player.getName()));
+            return true;
+        }
         if (!clan.invited(player)) {
             Message.send(player, Message.JOIN_COMMAND.NOT_INVITED.replaceAll("%name%", clan.getName()));
             return true;
@@ -58,5 +69,10 @@ public class JoinArgument extends ExecutorArgument {
         ClanHandler.save(clan);
         clan.sendColoredMessage(Message.JOIN_COMMAND.JOINED.replaceAll("%playerName%", player.getName()));
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        return new ArrayList<>();
     }
 }

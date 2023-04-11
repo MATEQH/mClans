@@ -85,9 +85,19 @@ public class Message {
             "&e/%label% withdraw <amount|all> &7Withdraw money from your clan's balance",
             "",
             "&6Leader commands",
+            "&e/%label% rename <name> &7Rename your clan.",
             "&e/%label% captains <add|remove> <playerName> &7Add or remove a captain.",
             "&e/%label% leader <playerName> &7Sets the new leader for your clan.",
             "&e/%label% disband &7Disband your clan",
+            ""
+    );
+    @ConfigPath(path = "STAFF_COMMAND")
+    public static List<String> STAFF_COMMAND = Arrays.asList(
+            "",
+            "&6&lClan staff command",
+            "",
+            "&e/%label% forcedisband <clanName> &7Force disband a clan",
+            "&e/%label% points <clanName> <add|set|remove> <amount> &7Set points of a clan",
             ""
     );
     @ConfigPath(path = "COMMAND_ONLY_FOR_PLAYERS")
@@ -98,7 +108,7 @@ public class Message {
         @ConfigPath(path = "FORCE_DISBAND_COMMAND.USAGE")
         public static String USAGE = "&cUsage: /%label% forcedisband <name>";
         @ConfigPath(path = "FORCE_DISBAND_COMMAND.DISBANDED")
-        public static String DISBANDED = "&eClan %name% was disbanded by %playerName%.";
+        public static String DISBANDED = "&eClan &c%name% was disbanded by &c%playerName%.";
     }
 
     public static class CAPTAINS_COMMAND {
@@ -146,7 +156,7 @@ public class Message {
     public static class DISBAND_COMMAND {
 
         @ConfigPath(path = "DISBAND_COMMAND.DISBANDED")
-        public static String DISBANDED = "&eClan %name% was disbanded by %playerName%.";
+        public static String DISBANDED = "&eClan &c%name% was disbanded by &c%playerName%.";
     }
 
     public static class INFO_COMMAND {
@@ -172,6 +182,8 @@ public class Message {
 
         public static class FOUND_BY {
 
+            @ConfigPath(path = "INFO_COMMAND.FOUND_BY.ID")
+            public static String ID = "&eClan found by id.";
             @ConfigPath(path = "INFO_COMMAND.FOUND_BY.CLAN")
             public static String CLAN = "&eClan found by clan name.";
             @ConfigPath(path = "INFO_COMMAND.FOUND_BY.PLAYER")
@@ -187,10 +199,14 @@ public class Message {
         public static String ALREADY_INVITED = "&ePlayer &c%targetName% &eis already invited to clan.";
         @ConfigPath(path = "INVITE_COMMAND.CLAN_FULL")
         public static String CLAN_FULL = "&eYour clan has already has max member count.";
-        @ConfigPath(path = "INVITE_COMMAND.INVITED_SELF")
-        public static String INVITED_SELF = "&eYou have been invited to clan &c%name%&e.";
-        @ConfigPath(path = "INVITE_COMMAND.INVITED_OTHERS")
-        public static String INVITED_OTHERS = "&ePlayer &c%targetName% &ehas been invited to clan.";
+        @ConfigPath(path = "INVITE_COMMAND.HOVER_MESSAGE")
+        public static String HOVER_MESSAGE = "&a&lClick here to join";
+        @ConfigPath(path = "INVITE_COMMAND.CLICKABLE_MESSAGE")
+        public static String CLICKABLE_MESSAGE = "&a&lClick here to join";
+        @ConfigPath(path = "INVITE_COMMAND.INVITED_TARGET")
+        public static String INVITED_TARGET = "&eYou have been invited to clan &c%name%&e.";
+        @ConfigPath(path = "INVITE_COMMAND.INVITED")
+        public static String INVITED = "&ePlayer &c%targetName% &ehas been invited to clan.";
     }
 
     public static class INVITES_COMMAND {
@@ -245,12 +261,21 @@ public class Message {
 
     public static class LIST_COMMAND {
 
+        public static class PREFIX {
+            @ConfigPath(path = "LIST_COMMAND.PREFIX.OWN")
+            public static String OWN = "&a";
+            @ConfigPath(path = "LIST_COMMAND.PREFIX.OTHER")
+            public static String OTHER = "&c";
+        }
+
         @ConfigPath(path = "LIST_COMMAND.NO_CLANS")
         public static String NO_CLANS = "&cThere are no clans yet.";
         @ConfigPath(path = "LIST_COMMAND.PAGE_NOT_FOUND")
         public static String PAGE_NOT_FOUND = "&cPage not found.";
         @ConfigPath(path = "LIST_COMMAND.CLAN_FORMAT")
-        public static String CLAN_FORMAT = "&7%position%. &e%name% &a(%onlineSize%/%size%)";
+        public static String CLAN_FORMAT = "&7%position%. %clickableName% &a(%onlineSize%/%size%)";
+        @ConfigPath(path = "LIST_COMMAND.HOVER_MESSAGE")
+        public static String HOVER_MESSAGE = "&7Click to view clan info";
         @ConfigPath(path = "LIST_COMMAND.LISTED")
         public static List<String> LISTED = Arrays.asList(
                 "",
@@ -266,18 +291,29 @@ public class Message {
 
         @ConfigPath(path = "RENAME_COMMAND.USAGE")
         public static String USAGE = "&cUsage: /%label% rename <name>";
+        @ConfigPath(path = "RENAME_COMMAND.ON_COOLDOWN")
+        public static String ON_COOLDOWN = "&7You cannot rename your clan until &c%remaining%&7.";
         @ConfigPath(path = "RENAME_COMMAND.RENAMED")
         public static String RENAMED = "&eClan %oldName% renamed to %name% by %playerName%.";
     }
 
     public static class TOP_COMMAND {
 
+        public static class PREFIX {
+            @ConfigPath(path = "TOP_COMMAND.PREFIX.OWN")
+            public static String OWN = "&a";
+            @ConfigPath(path = "TOP_COMMAND.PREFIX.OTHER")
+            public static String OTHER = "&c";
+        }
+
         @ConfigPath(path = "TOP_COMMAND.NO_CLANS")
         public static String NO_CLANS = "&cThere are no clans yet.";
         @ConfigPath(path = "TOP_COMMAND.PAGE_NOT_FOUND")
         public static String PAGE_NOT_FOUND = "&cPage not found.";
         @ConfigPath(path = "TOP_COMMAND.CLAN_FORMAT")
-        public static String CLAN_FORMAT = "&7%position%. &c%name% &e- &7%points%";
+        public static String CLAN_FORMAT = "&7%position%. &c%clickableName% &e- &7%points%";
+        @ConfigPath(path = "TOP_COMMAND.HOVER_MESSAGE")
+        public static String HOVER_MESSAGE = "&7Click to view clan info";
         @ConfigPath(path = "TOP_COMMAND.LISTED")
         public static List<String> LISTED = Arrays.asList(
                 "",
@@ -303,11 +339,46 @@ public class Message {
 
         @ConfigPath(path = "WITHDRAW_COMMAND.USAGE")
         public static String USAGE = "&cUsage: /%label% withdraw <amount>";
-        @ConfigPath(path = "WITHDRAW_COMMAND.CAN_NOT_DEPOSIT_ZERO")
-        public static String CAN_NOT_ZERO = "&eYou cannot deposit $0.";
+        @ConfigPath(path = "WITHDRAW_COMMAND.CAN_NOT_WITHDRAW_ZERO")
+        public static String CAN_NOT_WITHDRAW_ZERO = "&eYour cannot withdraw 0 or less.";
+        @ConfigPath(path = "WITHDRAW_COMMAND.BALANCE_ZERO")
+        public static String BALANCE_ZERO = "&eYour clan doesn't have any money.";
         @ConfigPath(path = "WITHDRAW_COMMAND.NOT_ENOUGH_MONEY")
         public static String NOT_ENOUGH_MONEY = "&eYour clan only has $%amount%.";
         @ConfigPath(path = "WITHDRAW_COMMAND.WITHDRAWN")
         public static String WITHDRAWN = "&e%playerName% withdrawn $%amount% from clan's balance.";
+    }
+
+    public static class POINTS_COMMAND {
+
+        @ConfigPath(path = "POINTS_COMMAND.USAGE")
+        public static String USAGE = "&cUsage: /%label% points <add|set|remove> <name> <amount>";
+        @ConfigPath(path = "POINTS_COMMAND.INVALID_NUMBER")
+        public static String INVALID_NUMBER = "&cInvalid number.";
+        @ConfigPath(path = "POINTS_COMMAND.TOO_LESS")
+        public static String TOO_LESS = "&cToo less amount.";
+        @ConfigPath(path = "POINTS_COMMAND.TOO_MUCH")
+        public static String TOO_MUCH = "&cToo much amount.";
+
+        public static class ADD {
+            @ConfigPath(path = "POINTS_COMMAND.ADD.USAGE")
+            public static String USAGE = "&cUsage: /%label% points add <name> <amount>";
+            @ConfigPath(path = "POINTS_COMMAND.ADD.ADDED")
+            public static String ADDED = "&eAdded &a%amount% &epoint(s) to clan &a%name%&e.";
+        }
+
+        public static class SET {
+            @ConfigPath(path = "POINTS_COMMAND.SET.USAGE")
+            public static String USAGE = "&cUsage: /%label% points set <name> <amount>";
+            @ConfigPath(path = "POINTS_COMMAND.SET.SETTED")
+            public static String SETTED = "&eSet &a%amount% &epoint(s) to clan &a%name%&e.";
+        }
+
+        public static class REMOVE {
+            @ConfigPath(path = "POINTS_COMMAND.REMOVE.USAGE")
+            public static String USAGE = "&cUsage: /%label% points remove <name> <amount>";
+            @ConfigPath(path = "POINTS_COMMAND.REMOVE.REMOVED")
+            public static String REMOVED = "&eRemoved &a%amount% &epoint(s) from clan &a%name%&e.";
+        }
     }
 }

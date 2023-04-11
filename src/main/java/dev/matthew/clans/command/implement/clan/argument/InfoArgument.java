@@ -14,9 +14,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -28,7 +28,7 @@ public class InfoArgument extends ExecutorArgument {
 
     @Override
     public List<Role> getRoles() {
-        return Collections.emptyList();
+        return null;
     }
 
     @Override
@@ -45,6 +45,15 @@ public class InfoArgument extends ExecutorArgument {
             }
             printDetails(sender, clan);
         } else if (args.length == 2) {
+            try {
+                UUID id = UUID.fromString(args[1]);
+                Clan clanById = ClanHandler.getById(id);
+                if (clanById != null) {
+                    Message.send(sender, Message.INFO_COMMAND.FOUND_BY.ID);
+                    printDetails(sender, clanById);
+                }
+                return true;
+            } catch (Exception e) {}
             boolean found = false;
             Clan clanByName = ClanHandler.getByName(args[1]);
             if (clanByName != null) {
@@ -109,7 +118,7 @@ public class InfoArgument extends ExecutorArgument {
         if (offlinePlayer.isOnline() && sender instanceof Player && ((Player) sender).canSee(offlinePlayer.getPlayer())) {
             return Config.ONLINE_PREFIX + offlinePlayer.getName();
         }
-        return (offlinePlayer.isOnline() ? Config.ONLINE_PREFIX : Config.ONLINE_PREFIX) + offlinePlayer.getName();
+        return (offlinePlayer.isOnline() ? Config.ONLINE_PREFIX : Config.OFFLINE_PREFIX) + offlinePlayer.getName();
     }
 
     @Override

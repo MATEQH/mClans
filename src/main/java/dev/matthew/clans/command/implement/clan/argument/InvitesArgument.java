@@ -41,7 +41,7 @@ public class InvitesArgument extends ExecutorArgument {
             Message.send(player, Message.NOT_IN_CLAN_SELF);
             return true;
         }
-        clan.getInvitedPlayers().keySet().removeIf(uuid -> clan.getInvitedPlayers().get(uuid) < System.currentTimeMillis());
+        clan.getInvitedPlayers().entrySet().removeIf(entry -> entry.getValue() < System.currentTimeMillis());
         List<UUID> invites = new ArrayList<>(clan.getInvitedPlayers().keySet());
         if (invites.isEmpty()) {
             Message.send(player, Message.INVITES_COMMAND.NO_PENDING);
@@ -57,5 +57,10 @@ public class InvitesArgument extends ExecutorArgument {
         }
         Message.send(player, Message.INVITES_COMMAND.INVITES.replaceAll("%invites%", stringBuilder.toString()));
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        return new ArrayList<>();
     }
 }

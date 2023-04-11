@@ -11,6 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.List;
 
 public class CreateArgument extends ExecutorArgument {
@@ -21,7 +22,7 @@ public class CreateArgument extends ExecutorArgument {
 
     @Override
     public List<Role> getRoles() {
-        return null;
+        return Collections.singletonList(Role.NONE);
     }
 
     @Override

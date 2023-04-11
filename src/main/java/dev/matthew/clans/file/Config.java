@@ -44,6 +44,18 @@ public class Config {
     public static boolean BROADCAST_DISBAND = true;
     @ConfigPath(path = "BROADCAST_RENAME")
     public static boolean BROADCAST_RENAME = true;
+    @ConfigPath(path = "RENAME_COOLDOWN")
+    public static long RENAME_COOLDOWN = 180000L;
+
+    public static class FORMAT {
+
+        @ConfigPath(path = "FORMAT.SECONDS")
+        public static String SECONDS = "%seconds% second(s)";
+        @ConfigPath(path = "FORMAT.MINUTES_SECONDS")
+        public static String MINUTES_SECONDS = "%minutes% minute(s) %seconds% second(s)";
+        @ConfigPath(path = "FORMAT.HOURS_MINUTES_SECONDS")
+        public static String HOURS_MINUTES_SECONDS = "%hours% hour(s) %minutes% minute(s) %seconds% second(s)";
+    }
 
     public static class CLAN {
 

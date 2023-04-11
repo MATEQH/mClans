@@ -1,4 +1,4 @@
-package dev.matthew.clans.command.implement.clan.argument;
+package dev.matthew.clans.command.implement.clan.argument.captain;
 
 import dev.matthew.clans.command.ExecutorArgument;
 import dev.matthew.clans.clan.Clan;
@@ -6,13 +6,16 @@ import dev.matthew.clans.clan.ClanHandler;
 import dev.matthew.clans.enums.Role;
 import dev.matthew.clans.file.Message;
 import dev.matthew.clans.util.BukkitUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UninviteArgument extends ExecutorArgument {
 
@@ -61,5 +64,17 @@ public class UninviteArgument extends ExecutorArgument {
         clan.getInvitedPlayers().remove(target.getUniqueId());
         Message.send(player, Message.UNINVITE_COMMAND.UNINVITED.replaceAll("%targetName%", target.getName()));
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        Player player = (Player) sender;
+        Clan clan = ClanHandler.getByPlayer(player);
+        if (args.length == 2 && clan != null && (clan.getRole(player) == Role.LEADER || clan.getRole(player) == Role.CAPTAIN)) {
+            return BukkitUtil.getCompletions(args, clan.getInvitedPlayers().keySet().stream()
+                    .filter(uuid -> clan.getInvitedPlayers().get(uuid) > System.currentTimeMillis())
+                    .map(uuid -> Bukkit.getOfflinePlayer(uuid).getName()).collect(Collectors.toList()));
+        }
+        return new ArrayList<>();
     }
 }

@@ -1,4 +1,4 @@
-package dev.matthew.clans.command.implement.clan.argument;
+package dev.matthew.clans.command.implement.clan.argument.leader;
 
 import dev.matthew.clans.clan.Clan;
 import dev.matthew.clans.clan.ClanHandler;
@@ -6,10 +6,12 @@ import dev.matthew.clans.command.ExecutorArgument;
 import dev.matthew.clans.enums.Role;
 import dev.matthew.clans.file.Config;
 import dev.matthew.clans.file.Message;
+import dev.matthew.clans.util.StringUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,12 +42,23 @@ public class RenameArgument extends ExecutorArgument {
             Message.send(player, Message.MUST_BE_LEADER);
             return true;
         }
+        if (System.currentTimeMillis() - Config.RENAME_COOLDOWN < clan.getLastRename()) {
+            Message.send(sender, Message.RENAME_COMMAND.ON_COOLDOWN
+                    .replaceAll("%label%", label)
+                    .replaceAll("%remaining%", StringUtil.formatMillisToChat(clan.getLastRename() - (System.currentTimeMillis() - Config.RENAME_COOLDOWN))));
+            return true;
+        }
         if (args.length != 2) {
             Message.send(sender, Message.RENAME_COMMAND.USAGE.replaceAll("%label%", label));
             return true;
         }
         String oldName = clan.getName();
-        ClanHandler.renameClan(clan, args[1]);
+        String newName = args[1];
+        if (ClanHandler.getByName(newName) != null) {
+            Message.send(player, Message.CLAN_ALREADY_EXISTS.replaceAll("%name%", ClanHandler.getByName(newName).getName()));
+            return true;
+        }
+        ClanHandler.renameClan(clan, newName);
         if (Config.BROADCAST_RENAME) {
             Message.sendGlobal(Message.RENAME_COMMAND.RENAMED
                     .replaceAll("%oldName%", oldName)
@@ -58,5 +71,10 @@ public class RenameArgument extends ExecutorArgument {
                     .replaceAll("%playerName%", player.getName()));
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        return new ArrayList<>();
     }
 }

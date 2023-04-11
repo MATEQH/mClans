@@ -4,7 +4,6 @@ import dev.matthew.clans.clan.Clan;
 import dev.matthew.clans.clan.ClanHandler;
 import dev.matthew.clans.event.implement.HitTeammateEvent;
 import dev.matthew.clans.file.Config;
-import dev.matthew.clans.util.PluginHook;
 import dev.matthew.clans.util.StringUtil;
 import dev.matthew.clans.util.hook.DuelsHook;
 import org.bukkit.Bukkit;

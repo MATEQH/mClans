@@ -18,9 +18,9 @@ public class Clan implements ClassSerializer {
     private Map<UUID, Role> members = new HashMap<>();
     private int kills = 0, points = 0;
     private double balance = 0;
-    private final Map<UUID, Long> invitedPlayers = new HashMap<>();
+    private Map<UUID, Long> invitedPlayers = new HashMap<>();
     private boolean teamFire = false;
-    private long lastRename = -1L;
+    private long lastRename = Long.MIN_VALUE;
 
     public Clan(UUID id, String name, UUID leader) {
         this.id = id;
@@ -41,12 +41,13 @@ public class Clan implements ClassSerializer {
         this.points = document.getInteger("points");
         this.balance = document.getDouble("balance");
         this.teamFire = document.getBoolean("teamFire", false);
-        this.lastRename = document.get("lastRename", -1L);
+        this.lastRename = document.getLong("lastRename");
     }
 
     @Override
     public Document serialize() {
         Document document = new Document();
+        document.put("_id", id);
         document.put("name", name);
         document.put("members", members.keySet().stream().collect(Collectors.toMap(
                 UUID::toString,

@@ -5,6 +5,7 @@ import dev.matthew.clans.clan.Clan;
 import dev.matthew.clans.clan.ClanHandler;
 import dev.matthew.clans.enums.Role;
 import dev.matthew.clans.file.Message;
+import dev.matthew.clans.util.BukkitUtil;
 import dev.matthew.clans.util.NumberUtil;
 import dev.matthew.clans.util.hook.VaultHook;
 import net.milkbowl.vault.economy.Economy;
@@ -12,6 +13,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -76,5 +78,15 @@ public class DepositArgument extends ExecutorArgument {
         }
         Message.send(player, Message.INVALID_ARGUMENTS);
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        Player player = (Player) sender;
+        Clan clan = ClanHandler.getByPlayer(player);
+        if (args.length == 2 && clan != null) {
+            return BukkitUtil.getCompletions(args, Arrays.asList("all", "100", "1000", "10000", "100000", "1000000"));
+        }
+        return new ArrayList<>();
     }
 }

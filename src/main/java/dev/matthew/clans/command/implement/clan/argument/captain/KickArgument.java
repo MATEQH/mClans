@@ -1,4 +1,4 @@
-package dev.matthew.clans.command.implement.clan.argument;
+package dev.matthew.clans.command.implement.clan.argument.captain;
 
 import dev.matthew.clans.command.ExecutorArgument;
 import dev.matthew.clans.clan.Clan;
@@ -12,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -99,10 +100,11 @@ public class KickArgument extends ExecutorArgument {
                 if (clan.getRole(player) == Role.LEADER) {
                     return BukkitUtil.getCompletions(args, clan.getMembersAsList(Collections.singletonList(Role.LEADER)).stream().map(uuid -> Bukkit.getOfflinePlayer(uuid).getName()).collect(Collectors.toList()));
                 } else if (clan.getRole(player) == Role.CAPTAIN) {
-                    return BukkitUtil.getCompletions(args, clan.getMembersAsList(Arrays.asList(Role.LEADER, Role.CAPTAIN)).stream().map(uuid -> Bukkit.getOfflinePlayer(uuid).getName()).collect(Collectors.toList()));
+                    return BukkitUtil.getCompletions(args, clan.getMembersAsList(Arrays.asList(Role.LEADER, Role.CAPTAIN)).stream()
+                            .map(uuid -> Bukkit.getOfflinePlayer(uuid).getName()).collect(Collectors.toList()));
                 }
             }
         }
-        return super.onTabComplete(sender, command, label, args);
+        return new ArrayList<>();
     }
 }

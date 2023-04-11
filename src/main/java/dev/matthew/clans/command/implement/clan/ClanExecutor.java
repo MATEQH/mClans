@@ -5,7 +5,14 @@ import dev.matthew.clans.command.ArgumentExecutor;
 import dev.matthew.clans.command.ExecutorArgument;
 import dev.matthew.clans.command.implement.clan.argument.*;
 import dev.matthew.clans.clan.Clan;
+import dev.matthew.clans.command.implement.clan.argument.captain.*;
+import dev.matthew.clans.command.implement.clan.argument.leader.CaptainsArgument;
+import dev.matthew.clans.command.implement.clan.argument.leader.DisbandArgument;
+import dev.matthew.clans.command.implement.clan.argument.leader.LeaderArgument;
+import dev.matthew.clans.command.implement.clan.argument.leader.RenameArgument;
 import dev.matthew.clans.command.implement.clan.argument.staff.ForceDisbandArgument;
+import dev.matthew.clans.command.implement.clan.argument.staff.PointsArgument;
+import dev.matthew.clans.enums.Role;
 import dev.matthew.clans.file.Message;
 import dev.matthew.clans.util.BukkitUtil;
 import dev.matthew.clans.clan.ClanHandler;
@@ -16,7 +23,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +33,7 @@ public class ClanExecutor extends ArgumentExecutor {
     public ClanExecutor(String label) {
         super(label, "mclans.use");
         addArgument(new ForceDisbandArgument("forcedisband"));
+        addArgument(new PointsArgument("points"));
         addArgument(new CaptainsArgument("captains"));
         addArgument(new CreateArgument("create"));
         addArgument(new DisbandArgument("disband"));
@@ -75,20 +82,23 @@ public class ClanExecutor extends ArgumentExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            return Arrays.asList("Can", "only", "be", "used", "as", "player");
-        }
         List<String> results = new ArrayList<>();
         if (args.length < 2) {
             for (ExecutorArgument argument : getArguments()) {
-                if (argument.getPermission() == null || sender.hasPermission(argument.getPermission())) {
-                    Player player = (Player) sender;
-                    Clan clan = ClanHandler.getByPlayer(player);
-                    if (clan == null && (argument.getRoles() == null || argument.getRoles().isEmpty())) {
-                        addResult(argument, results);
-                    } else if (clan != null && (argument.getRoles() != null && (argument.getRoles().contains(clan.getRole(player)) || argument.getRoles().isEmpty()))) {
-                        addResult(argument, results);
-                    }
+                if (argument.getPermission() == null || !sender.hasPermission(argument.getPermission())) continue;
+                if (argument.getRoles() == null) {
+                    addResult(argument, results);
+                    continue;
+                }
+                if (!(sender instanceof Player)) continue;
+                Player player = (Player) sender;
+                Clan clan = ClanHandler.getByPlayer(player);
+                if (argument.getRoles().contains(Role.NONE) && clan == null) {
+                    addResult(argument, results);
+                    continue;
+                }
+                if (argument.getRoles().contains(clan.getRole(player))) {
+                    addResult(argument, results);
                 }
             }
         } else {

@@ -60,6 +60,7 @@ public class ClanHandler {
             return;
         }
         clan.setName(newName);
+        clan.setLastRename(System.currentTimeMillis());
         save(clan);
     }
 

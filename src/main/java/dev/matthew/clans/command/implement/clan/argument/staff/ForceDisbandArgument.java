@@ -6,15 +6,10 @@ import dev.matthew.clans.command.ExecutorArgument;
 import dev.matthew.clans.enums.Role;
 import dev.matthew.clans.file.Config;
 import dev.matthew.clans.file.Message;
-import dev.matthew.clans.util.BukkitUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.HumanEntity;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ForceDisbandArgument extends ExecutorArgument {
 
@@ -24,7 +19,7 @@ public class ForceDisbandArgument extends ExecutorArgument {
 
     @Override
     public List<Role> getRoles() {
-        return Collections.singletonList(Role.LEADER);
+        return null;
     }
 
     @Override
@@ -51,10 +46,5 @@ public class ForceDisbandArgument extends ExecutorArgument {
             );
         }
         return true;
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        return BukkitUtil.getCompletions(args, Bukkit.getOnlinePlayers().stream().filter(online -> ClanHandler.getByPlayer(online) != null).map(HumanEntity::getName).collect(Collectors.toList()));
     }
 }

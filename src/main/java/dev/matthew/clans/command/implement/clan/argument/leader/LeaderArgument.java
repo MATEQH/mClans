@@ -1,4 +1,4 @@
-package dev.matthew.clans.command.implement.clan.argument;
+package dev.matthew.clans.command.implement.clan.argument.leader;
 
 import dev.matthew.clans.command.ExecutorArgument;
 import dev.matthew.clans.clan.Clan;
@@ -12,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,9 +72,9 @@ public class LeaderArgument extends ExecutorArgument {
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
         Clan clan = ClanHandler.getByPlayer(player);
-        if (clan != null && clan.getRole(player) == Role.LEADER && args.length == 2) {
+        if (args.length == 2 && clan != null && clan.getRole(player) == Role.LEADER && args.length == 2) {
             return BukkitUtil.getCompletions(args, clan.getMembersAsList(Collections.singletonList(Role.LEADER)).stream().map(uuid -> Bukkit.getOfflinePlayer(uuid).getName()).collect(Collectors.toList()));
         }
-        return super.onTabComplete(sender, command, label, args);
+        return new ArrayList<>();
     }
 }

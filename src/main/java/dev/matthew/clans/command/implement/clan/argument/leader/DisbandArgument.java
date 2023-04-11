@@ -1,4 +1,4 @@
-package dev.matthew.clans.command.implement.clan.argument;
+package dev.matthew.clans.command.implement.clan.argument.leader;
 
 import dev.matthew.clans.command.ExecutorArgument;
 import dev.matthew.clans.clan.Clan;
@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,5 +54,10 @@ public class DisbandArgument extends ExecutorArgument {
             );
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        return new ArrayList<>();
     }
 }

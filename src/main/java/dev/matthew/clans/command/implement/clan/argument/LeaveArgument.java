@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,5 +46,10 @@ public class LeaveArgument extends ExecutorArgument {
         Message.send(player, Message.LEAVE_COMMAND.LEFT_SELF.replaceAll("%name%", clan.getName()));
         clan.sendColoredMessage(Message.LEAVE_COMMAND.LEFT_OTHERS.replaceAll("%playerName%", player.getName()));
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        return new ArrayList<>();
     }
 }

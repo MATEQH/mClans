@@ -21,7 +21,7 @@ public class FlatFileManager extends Manager {
     @Override
     public Manager save(Clan clan) {
         ForkJoinPool.commonPool().execute(() -> {
-            File file = FileUtil.getOrCreateFile(new File(plugin.getDataFolder(), "clans"), clan.getName().toLowerCase() + ".json");
+            File file = FileUtil.getOrCreateFile(new File(plugin.getDataFolder(), "clans"), clan.getId().toString() + ".json");
             FileUtil.writeContent(file, gson.toJson(clan.serialize()));
         });
         return this;
@@ -30,7 +30,7 @@ public class FlatFileManager extends Manager {
     @Override
     public Manager remove(Clan clan) {
         ForkJoinPool.commonPool().execute(() -> {
-            File file = FileUtil.getFile(new File(plugin.getDataFolder(), "clans"), clan.getName().toLowerCase() + ".json");
+            File file = FileUtil.getFile(new File(plugin.getDataFolder(), "clans"), clan.getId().toString() + ".json");
             if (file != null && file.exists()) {
                 file.delete();
             }
@@ -40,15 +40,16 @@ public class FlatFileManager extends Manager {
 
     @Override
     public Manager loadAll() {
+        File path = new File(plugin.getDataFolder(),"clans");
+        if (path.exists() && path.listFiles() != null) {
+            Arrays.stream(path.listFiles()).forEach(file -> {
+                Clan clan = new Clan(Document.parse(FileUtil.readContent(file)));
+                ClanHandler.getClanMap().put(clan.getId(), clan);
+                clan.getMembers().keySet().forEach(uuid -> ClanHandler.getPlayerMap().put(uuid, clan));
+            });
+        }
         CompletableFuture.supplyAsync(() -> {
-            File path = new File(plugin.getDataFolder(),"clans");
-            if (path.exists() && path.listFiles() != null) {
-                Arrays.stream(path.listFiles()).forEach(file -> {
-                    Clan clan = new Clan(Document.parse(FileUtil.readContent(file)));
-                    ClanHandler.getClanMap().put(clan.getId(), clan);
-                    clan.getMembers().keySet().forEach(uuid -> ClanHandler.getPlayerMap().put(uuid, clan));
-                });
-            }
+
             return null;
         });
         return this;
@@ -58,7 +59,7 @@ public class FlatFileManager extends Manager {
     public Manager saveAll() {
         CompletableFuture.supplyAsync(() -> {
             ClanHandler.getClanMap().values().forEach(clan -> {
-                File file = FileUtil.getOrCreateFile(new File(plugin.getDataFolder(), "clans"), clan.getName().toLowerCase() + ".json");
+                File file = FileUtil.getOrCreateFile(new File(plugin.getDataFolder(), "clans"), clan.getId().toString() + ".json");
                 FileUtil.writeContent(file, gson.toJson(clan.serialize()));
             });
             return null;
