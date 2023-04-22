@@ -22,6 +22,9 @@ public class HelpArgument extends ExecutorArgument {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Message.HELP_COMMAND.forEach(message -> Message.send(sender, message.replaceAll("%label%", label)));
+        if (sender.hasPermission("mclans.staff")) {
+            Message.STAFF_COMMAND.forEach(message -> Message.send(sender, message.replaceAll("%label%", label)));
+        }
         return true;
     }
 }

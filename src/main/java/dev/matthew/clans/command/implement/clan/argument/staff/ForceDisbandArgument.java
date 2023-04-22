@@ -35,12 +35,12 @@ public class ForceDisbandArgument extends ExecutorArgument {
         }
         ClanHandler.removeClan(clan);
         if (Config.BROADCAST_DISBAND) {
-            Message.sendGlobal(Message.DISBAND_COMMAND.DISBANDED
+            Message.sendGlobal(Message.FORCE_DISBAND_COMMAND.DISBANDED
                     .replaceAll("%name%", clan.getName())
                     .replaceAll("%playerName%", sender.getName())
             );
         } else {
-            Message.send(sender, Message.DISBAND_COMMAND.DISBANDED
+            Message.send(sender, Message.FORCE_DISBAND_COMMAND.DISBANDED
                     .replaceAll("%name%", clan.getName())
                     .replaceAll("%playerName%", sender.getName())
             );

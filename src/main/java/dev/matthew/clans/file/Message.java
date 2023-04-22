@@ -94,7 +94,7 @@ public class Message {
     @ConfigPath(path = "STAFF_COMMAND")
     public static List<String> STAFF_COMMAND = Arrays.asList(
             "",
-            "&6&lClan staff command",
+            "&6&lStaff command",
             "",
             "&e/%label% forcedisband <clanName> &7Force disband a clan",
             "&e/%label% points <clanName> <add|set|remove> <amount> &7Set points of a clan",
@@ -199,12 +199,8 @@ public class Message {
         public static String ALREADY_INVITED = "&ePlayer &c%targetName% &eis already invited to clan.";
         @ConfigPath(path = "INVITE_COMMAND.CLAN_FULL")
         public static String CLAN_FULL = "&eYour clan has already has max member count.";
-        @ConfigPath(path = "INVITE_COMMAND.HOVER_MESSAGE")
-        public static String HOVER_MESSAGE = "&a&lClick here to join";
-        @ConfigPath(path = "INVITE_COMMAND.CLICKABLE_MESSAGE")
-        public static String CLICKABLE_MESSAGE = "&a&lClick here to join";
         @ConfigPath(path = "INVITE_COMMAND.INVITED_TARGET")
-        public static String INVITED_TARGET = "&eYou have been invited to clan &c%name%&e.";
+        public static String INVITED_TARGET = "<yellow>You have been invited to clan <red>%name%<yellow>. <click:run_command:/clan join %name%><hover:show_text:\"<gray>Click here to join clan %name%\"><green><bold>JOIN";
         @ConfigPath(path = "INVITE_COMMAND.INVITED")
         public static String INVITED = "&ePlayer &c%targetName% &ehas been invited to clan.";
     }
@@ -263,9 +259,11 @@ public class Message {
 
         public static class PREFIX {
             @ConfigPath(path = "LIST_COMMAND.PREFIX.OWN")
-            public static String OWN = "&a";
-            @ConfigPath(path = "LIST_COMMAND.PREFIX.OTHER")
-            public static String OTHER = "&c";
+            public static String OWN = "<green>";
+            @ConfigPath(path = "LIST_COMMAND.PREFIX.ENEMY")
+            public static String ENEMY = "<red>";
+            @ConfigPath(path = "LIST_COMMAND.PREFIX.ENEMY_ONLINE")
+            public static String ENEMY_ONLINE = "<yellow>";
         }
 
         @ConfigPath(path = "LIST_COMMAND.NO_CLANS")
@@ -273,9 +271,7 @@ public class Message {
         @ConfigPath(path = "LIST_COMMAND.PAGE_NOT_FOUND")
         public static String PAGE_NOT_FOUND = "&cPage not found.";
         @ConfigPath(path = "LIST_COMMAND.CLAN_FORMAT")
-        public static String CLAN_FORMAT = "&7%position%. %clickableName% &a(%onlineSize%/%size%)";
-        @ConfigPath(path = "LIST_COMMAND.HOVER_MESSAGE")
-        public static String HOVER_MESSAGE = "&7Click to view clan info";
+        public static String CLAN_FORMAT = "<gray>%position%. %prefix%<click:run_command:/clan info %id%><hover:show_text:\"<yellow>Click here to view info of clan %prefix%%name%\">%name%</hover> <green>(%onlineSize%/%size%)";
         @ConfigPath(path = "LIST_COMMAND.LISTED")
         public static List<String> LISTED = Arrays.asList(
                 "",
@@ -301,9 +297,11 @@ public class Message {
 
         public static class PREFIX {
             @ConfigPath(path = "TOP_COMMAND.PREFIX.OWN")
-            public static String OWN = "&a";
-            @ConfigPath(path = "TOP_COMMAND.PREFIX.OTHER")
-            public static String OTHER = "&c";
+            public static String OWN = "<green>";
+            @ConfigPath(path = "TOP_COMMAND.PREFIX.ENEMY")
+            public static String ENEMY = "<red>";
+            @ConfigPath(path = "TOP_COMMAND.PREFIX.ENEMY_ONLINE")
+            public static String ENEMY_ONLINE = "<yellow>";
         }
 
         @ConfigPath(path = "TOP_COMMAND.NO_CLANS")
@@ -311,9 +309,7 @@ public class Message {
         @ConfigPath(path = "TOP_COMMAND.PAGE_NOT_FOUND")
         public static String PAGE_NOT_FOUND = "&cPage not found.";
         @ConfigPath(path = "TOP_COMMAND.CLAN_FORMAT")
-        public static String CLAN_FORMAT = "&7%position%. &c%clickableName% &e- &7%points%";
-        @ConfigPath(path = "TOP_COMMAND.HOVER_MESSAGE")
-        public static String HOVER_MESSAGE = "&7Click to view clan info";
+        public static String CLAN_FORMAT = "<gray>%position%. %prefix%<click:run_command:/clan info %id%><hover:show_text:\"<yellow>Click here to view info of clan %prefix%%name%\">%name%</hover> <yellow>- <gray>%points%";
         @ConfigPath(path = "TOP_COMMAND.LISTED")
         public static List<String> LISTED = Arrays.asList(
                 "",

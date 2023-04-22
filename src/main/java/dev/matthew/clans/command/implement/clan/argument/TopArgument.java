@@ -7,18 +7,15 @@ import dev.matthew.clans.enums.Role;
 import dev.matthew.clans.file.Config;
 import dev.matthew.clans.file.Message;
 import dev.matthew.clans.util.NumberUtil;
-import dev.matthew.clans.util.StringUtil;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import me.minidigger.minimessage.bungee.MiniMessageParser;
+import me.minidigger.minimessage.bungee.MiniMessageSerializer;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TopArgument extends ExecutorArgument {
 
@@ -55,9 +52,7 @@ public class TopArgument extends ExecutorArgument {
             Message.send(sender, Message.TOP_COMMAND.NO_CLANS);
             return;
         }
-        List<Clan> sorted = ClanHandler.getClanMap().values().stream().sorted(Comparator.comparing(clan ->
-                ((Clan) clan).getPoints()
-        ).reversed()).collect(Collectors.toList());
+        List<Clan> sorted = ClanHandler.getSortedClans();
         int maxPage = (int) Math.ceil((double) sorted.size() / (double) clansPerPage);
         if (currentPage > maxPage) {
             Message.send(sender, Message.TOP_COMMAND.PAGE_NOT_FOUND);
@@ -71,47 +66,18 @@ public class TopArgument extends ExecutorArgument {
                 if (message.equals("%clans%")) {
                     for (int i = minClan; i < (Math.min(maxClan, sorted.size())); i++) {
                         Clan clan = sorted.get(i);
-
-                        TextComponent info = new TextComponent(StringUtil.translate(
-                                (playerClan != null && playerClan == clan ?
-                                        Message.TOP_COMMAND.PREFIX.OWN : Message.TOP_COMMAND.PREFIX.OTHER) +
-                                        clan.getName()
-                        ));
-                        info.setHoverEvent(new HoverEvent(
-                                HoverEvent.Action.SHOW_TEXT,
-                                TextComponent.fromLegacyText(StringUtil.translate(
-                                        Message.TOP_COMMAND.HOVER_MESSAGE
-                                                .replaceAll("%points%", String.valueOf(clan.getPoints()))
-                                                .replaceAll("%kills%", String.valueOf(clan.getKills()))
-                                                .replaceAll("%position%", String.valueOf(i + 1))
-                                                .replaceAll("%name%", (playerClan != null && playerClan == clan ?
-                                                        Message.LIST_COMMAND.PREFIX.OWN : Message.LIST_COMMAND.PREFIX.OTHER) + clan.getName())
-                                                .replaceAll("%onlineSize%", String.valueOf(clan.getOnlineMembersAsList((Player) sender).size()))
-                                                .replaceAll("%size%", String.valueOf(clan.getMembers().size()))
-                                ))
-                        ));
-                        info.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + label + " info " + clan.getId()));
-
-                        TextComponent text = new TextComponent();
-                        String[] split = Message.TOP_COMMAND.CLAN_FORMAT.split(" ");
-                        for (int j = 0; j < split.length; j++) {
-                            String arg = split[j];
-                            if (arg.contains("%clickableName%")) {
-                                text.addExtra(info);
-                            } else {
-                                text.addExtra(StringUtil.translate(arg
-                                        .replaceAll("%points%", String.valueOf(clan.getPoints()))
-                                        .replaceAll("%kills%", String.valueOf(clan.getKills()))
-                                        .replaceAll("%position%", String.valueOf(i + 1))
-                                        .replaceAll("%name%", (playerClan != null && playerClan == clan ?
-                                                Message.TOP_COMMAND.PREFIX.OWN : Message.TOP_COMMAND.PREFIX.OTHER) + clan.getName())
-                                        .replaceAll("%onlineSize%", String.valueOf(clan.getOnlineMembersAsList((Player) sender).size()))
-                                        .replaceAll("%size%", String.valueOf(clan.getMembers().size())))
-                                );
-                            }
-                            if (j < split.length) text.addExtra(" ");
-                        }
-                        player.spigot().sendMessage(text);
+                        BaseComponent[] comp = MiniMessageParser.parseFormat(Message.TOP_COMMAND.CLAN_FORMAT
+                                .replaceAll("%prefix%", playerClan != null && playerClan == clan ?
+                                        Message.TOP_COMMAND.PREFIX.OWN : clan.getOnlineMembersAsList(player).size() < 1 ? Message.TOP_COMMAND.PREFIX.ENEMY :
+                                        Message.TOP_COMMAND.PREFIX.ENEMY_ONLINE)
+                                .replaceAll("%id%", clan.getId().toString())
+                                .replaceAll("%name%", clan.getName())
+                                .replaceAll("%points%", String.valueOf(clan.getPoints()))
+                                .replaceAll("%kills%", String.valueOf(clan.getKills()))
+                                .replaceAll("%position%", String.valueOf(i + 1))
+                                .replaceAll("%onlineSize%", String.valueOf(clan.getOnlineMembersAsList(player).size()))
+                                .replaceAll("%size%", String.valueOf(clan.getMembers().size())));
+                        player.spigot().sendMessage(comp);
                     }
                 } else {
                     Message.send(sender, message
@@ -127,15 +93,27 @@ public class TopArgument extends ExecutorArgument {
             if (message.equals("%clans%")) {
                 for (int i = minClan; i < (Math.min(maxClan, sorted.size())); i++) {
                     Clan clan = sorted.get(i);
-                    Message.send(sender, Message.TOP_COMMAND.CLAN_FORMAT
+                    BaseComponent[] comp = MiniMessageParser.parseFormat(Message.TOP_COMMAND.CLAN_FORMAT
+                            .replaceAll("%prefix%", clan.getOnlineMembersAsList().size() < 1 ? Message.TOP_COMMAND.PREFIX.ENEMY :
+                                    Message.TOP_COMMAND.PREFIX.ENEMY_ONLINE)
+                            .replaceAll("%id%", clan.getId().toString())
+                            .replaceAll("%name%", clan.getName())
                             .replaceAll("%points%", String.valueOf(clan.getPoints()))
                             .replaceAll("%kills%", String.valueOf(clan.getKills()))
                             .replaceAll("%position%", String.valueOf(i + 1))
-                            .replaceAll("%name%", clan.getName())
-                            .replaceAll("%clickableName%", clan.getName())
                             .replaceAll("%onlineSize%", String.valueOf(clan.getOnlineMembersAsList().size()))
-                            .replaceAll("%size%", String.valueOf(clan.getMembers().size()))
-                    );
+                            .replaceAll("%size%", String.valueOf(clan.getMembers().size())));
+                    sender.sendMessage(MiniMessageParser.stripTokens(MiniMessageSerializer.serialize(comp)));
+//                    sender.sendMessage(Message.TOP_COMMAND.CLAN_FORMAT
+//                            .replaceAll("%prefix%", clan.getOnlineMembersAsList().size() < 1 ? Message.TOP_COMMAND.PREFIX.ENEMY :
+//                                    Message.TOP_COMMAND.PREFIX.ENEMY_ONLINE)
+//                            .replaceAll("%id%", clan.getId().toString())
+//                            .replaceAll("%name%", clan.getName())
+//                            .replaceAll("%points%", String.valueOf(clan.getPoints()))
+//                            .replaceAll("%kills%", String.valueOf(clan.getKills()))
+//                            .replaceAll("%position%", String.valueOf(i + 1))
+//                            .replaceAll("%onlineSize%", String.valueOf(clan.getOnlineMembersAsList().size()))
+//                            .replaceAll("%size%", String.valueOf(clan.getMembers().size())));
                 }
             } else {
                 Message.send(sender, message
