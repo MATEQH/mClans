@@ -4,9 +4,11 @@ import dev.matthew.clans.clan.Clan;
 import dev.matthew.clans.clan.ClanHandler;
 import dev.matthew.clans.event.implement.HitTeammateEvent;
 import dev.matthew.clans.file.Config;
+import dev.matthew.clans.file.Message;
 import dev.matthew.clans.util.StringUtil;
 import dev.matthew.clans.util.hook.DuelsHook;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -115,8 +117,25 @@ public class PlayerListener implements Listener {
                         StringUtil.translate(format).replaceAll("%message%", message));
                 return;
             }
-            String prefix = StringUtil.translate(Config.CLAN.CHAT_PREFIX.replaceAll("%name%", clan.getName()));
-            event.setFormat(prefix + event.getFormat());
+//            String prefix = StringUtil.translate(Config.CLAN.CHAT_PREFIX.replaceAll("%relation%", ).replaceAll("%name%", clan.getName()));
+//            event.setFormat(prefix + event.getFormat());
+            event.setCancelled(true);
+            Bukkit.getOnlinePlayers().forEach(online -> {
+                if (ClanHandler.getByPlayer(online) == null || ClanHandler.getByPlayer(online) != clan) {
+                    online.sendMessage(StringUtil.translate(Config.CLAN.CHAT_PREFIX)
+                            .replaceAll("%name%", clan.getName())
+                            .replaceAll("%relation%", Config.CLAN.RELATION.ENEMY) + event.getFormat()
+                    );
+                } else {
+                    online.sendMessage(StringUtil.translate(Config.CLAN.CHAT_PREFIX)
+                            .replaceAll("%name%", clan.getName())
+                            .replaceAll("%relation%", Config.CLAN.RELATION.TEAMMATE) + event.getFormat()
+                    );
+                }
+            });
+            Bukkit.getConsoleSender().sendMessage(ChatColor.stripColor(StringUtil.translate(Config.CLAN.CHAT_PREFIX)
+                    .replaceAll("%name%", clan.getName())
+                    .replaceAll("%relation%", Config.CLAN.RELATION.ENEMY) + event.getFormat()));
         }
     }
 

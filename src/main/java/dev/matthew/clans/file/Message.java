@@ -97,7 +97,7 @@ public class Message {
             "&6&lStaff command",
             "",
             "&e/%label% forcedisband <clanName> &7Force disband a clan",
-            "&e/%label% points <clanName> <add|set|remove> <amount> &7Set points of a clan",
+            "&e/%label% points <add|set|remove> <clanName> <amount> &7Set points of a clan",
             ""
     );
     @ConfigPath(path = "COMMAND_ONLY_FOR_PLAYERS")

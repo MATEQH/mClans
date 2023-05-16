@@ -56,7 +56,7 @@ public class CreateArgument extends ExecutorArgument {
             Message.send(player, Message.CREATE_COMMAND.NAME_NOT_ALPHANUMERIC.replaceAll("%name%", name));
             return true;
         }
-        if (Config.CLAN.BLOCKED_NAMES.contains(name)) {
+        if (Config.CLAN.BLOCKED_NAMES.contains(name.toLowerCase())) {
             Message.send(player, Message.BLOCKED_CLAN_NAME.replaceAll("%name%", name));
             return true;
         }

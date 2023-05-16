@@ -72,13 +72,20 @@ public class Config {
         @ConfigPath(path = "CLAN.NAME_MAX_LENGTH")
         public static int NAME_MAX_LENGTH = 8;
         @ConfigPath(path = "CLAN.CHAT_PREFIX")
-        public static String CHAT_PREFIX = "&8[&a%name%&8]&r ";
+        public static String CHAT_PREFIX = "&8[%relation%%name%&8]&r ";
         @ConfigPath(path = "CLAN.CLAN_CHAT_COLORED_MESSAGE")
         public static boolean CLAN_CHAT_COLORED_MESSAGE = false;
         @ConfigPath(path = "CLAN.CLAN_CHAT_FORMAT")
         public static String CLAN_CHAT_FORMAT = "&6(Clan) &7%playerName% &7» %message%";
         @ConfigPath(path = "CLAN.INVITATION_EXPIRE")
         public static long INVITATION_EXPIRE = 30000L;
+
+        public static class RELATION {
+            @ConfigPath(path = "CLAN.RELATION.TEAMMATE")
+            public static String TEAMMATE = "&a";
+            @ConfigPath(path = "CLAN.RELATION.ENEMY")
+            public static String ENEMY = "&c";
+        }
     }
 
     public static class PLACEHOLDER {
