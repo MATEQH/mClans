@@ -71,12 +71,22 @@ public class Config {
         public static int NAME_MIN_LENGTH = 3;
         @ConfigPath(path = "CLAN.NAME_MAX_LENGTH")
         public static int NAME_MAX_LENGTH = 8;
-        @ConfigPath(path = "CLAN.CHAT_PREFIX")
-        public static String CHAT_PREFIX = "&8[%relation%%name%&8]&r ";
-        @ConfigPath(path = "CLAN.CLAN_CHAT_COLORED_MESSAGE")
-        public static boolean CLAN_CHAT_COLORED_MESSAGE = false;
-        @ConfigPath(path = "CLAN.CLAN_CHAT_FORMAT")
-        public static String CLAN_CHAT_FORMAT = "&6(Clan) &7%playerName% &7» %message%";
+
+        public static class CHAT {
+            @ConfigPath(path = "CLAN.CHAT.PREFIX")
+            public static String PREFIX = "&8[&e%name%&8]&r ";
+            @ConfigPath(path = "CLAN.CHAT.PREFIX_NO_CLAN")
+            public static String PREFIX_NO_CLAN = "&8[&c*&8]&r ";
+
+            public static class CLAN_CHAT {
+                @ConfigPath(path = "CLAN.CLAN_CHAT.COLORED_MESSAGE")
+                public static boolean COLORED_MESSAGE = false;
+                @ConfigPath(path = "CLAN.CLAN_CHAT.FORMAT")
+                public static String FORMAT = "&6(Clan) &7%playerName% &7» %message%";
+            }
+        }
+
+
         @ConfigPath(path = "CLAN.INVITATION_EXPIRE")
         public static long INVITATION_EXPIRE = 30000L;
 
@@ -101,7 +111,7 @@ public class Config {
         @ConfigPath(path = "LUNAR.CLAN_TAG")
         public static List<String> CLAN_TAG = Arrays.asList(
                 "%displayName%",
-                "&7[&6%clanName%&7]"
+                "&7[&6%name%&7]"
         );
         @ConfigPath(path = "LUNAR.NO_CLAN_TAG")
         public static List<String> NO_CLAN_TAG = Arrays.asList(

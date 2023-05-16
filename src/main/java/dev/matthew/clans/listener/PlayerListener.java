@@ -104,39 +104,23 @@ public class PlayerListener implements Listener {
         }
         Player player = event.getPlayer();
         Clan clan = ClanHandler.getByPlayer(player);
+        String prefix = StringUtil.translate(Config.CLAN.CHAT.PREFIX_NO_CLAN);
         if (clan != null) {
             String message = event.getMessage();
-            if (message.startsWith("@")) {
+            if (message.startsWith("@") && message.length() > 1) {
                 message = message.substring(1);
                 event.setCancelled(true);
-                String format = Config.CLAN.CLAN_CHAT_FORMAT
+                String format = Config.CLAN.CHAT.CLAN_CHAT.FORMAT
                         .replaceAll("%name%", clan.getName())
                         .replaceAll("%playerName%", player.getDisplayName());
-                clan.sendMessage(Config.CLAN.CLAN_CHAT_COLORED_MESSAGE ?
+                clan.sendMessage(Config.CLAN.CHAT.CLAN_CHAT.COLORED_MESSAGE ?
                         StringUtil.translate(format.replaceAll("%message%", message)) :
                         StringUtil.translate(format).replaceAll("%message%", message));
                 return;
             }
-//            String prefix = StringUtil.translate(Config.CLAN.CHAT_PREFIX.replaceAll("%relation%", ).replaceAll("%name%", clan.getName()));
-//            event.setFormat(prefix + event.getFormat());
-            event.setCancelled(true);
-            Bukkit.getOnlinePlayers().forEach(online -> {
-                if (ClanHandler.getByPlayer(online) == null || ClanHandler.getByPlayer(online) != clan) {
-                    online.sendMessage(StringUtil.translate(Config.CLAN.CHAT_PREFIX)
-                            .replaceAll("%name%", clan.getName())
-                            .replaceAll("%relation%", Config.CLAN.RELATION.ENEMY) + event.getFormat()
-                    );
-                } else {
-                    online.sendMessage(StringUtil.translate(Config.CLAN.CHAT_PREFIX)
-                            .replaceAll("%name%", clan.getName())
-                            .replaceAll("%relation%", Config.CLAN.RELATION.TEAMMATE) + event.getFormat()
-                    );
-                }
-            });
-            Bukkit.getConsoleSender().sendMessage(ChatColor.stripColor(StringUtil.translate(Config.CLAN.CHAT_PREFIX)
-                    .replaceAll("%name%", clan.getName())
-                    .replaceAll("%relation%", Config.CLAN.RELATION.ENEMY) + event.getFormat()));
+            prefix = StringUtil.translate(Config.CLAN.CHAT.PREFIX.replaceAll("%name%", clan.getName()));
         }
+        event.setFormat(prefix + event.getFormat());
     }
 
 //    @EventHandler

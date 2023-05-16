@@ -32,6 +32,11 @@ public class NametagTask implements Runnable {
                     .replaceAll("%playerName%", player.getName())
                     .replaceAll("%displayName%", player.getDisplayName())
                     .replaceAll("%name%", clan.getName())
+                    .replaceAll("%balance%", String.valueOf(clan.getBalance()))
+                    .replaceAll("%points%", String.valueOf(clan.getPoints()))
+                    .replaceAll("%kills%", String.valueOf(clan.getKills()))
+                    .replaceAll("%onlineSize%", String.valueOf(clan.getOnlineMembersAsList(target).size()))
+                    .replaceAll("%size%", String.valueOf(clan.getMembers().size()))
             )).collect(Collectors.toList());
         }
 

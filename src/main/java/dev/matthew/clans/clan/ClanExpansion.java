@@ -82,6 +82,8 @@ public class ClanExpansion extends PlaceholderExpansion {
             switch (param) {
                 case "clan_top_prefix":
                     return clan == null ? Config.PLACEHOLDER.NO_CLAN_PREFIX : Config.PLACEHOLDER.CLAN_PREFIX.replaceAll("%name%", returnName(clan));
+                case "clan_top_relation":
+                    return returnRelation(clan, ClanHandler.getByPlayer(player));
                 case "clan_top_name":
                     return returnName(clan);
                 case "clan_top_balance":
@@ -109,6 +111,8 @@ public class ClanExpansion extends PlaceholderExpansion {
             switch (param) {
                 case "clan_prefix":
                     return clan == null ? Config.PLACEHOLDER.NO_CLAN_PREFIX : Config.PLACEHOLDER.CLAN_PREFIX.replaceAll("%name%", returnName(clan));
+                case "clan_relation":
+                    return returnRelation(clan, ClanHandler.getByPlayer(player));
                 case "clan_name":
                     return returnName(clan);
                 case "clan_balance":
@@ -130,8 +134,12 @@ public class ClanExpansion extends PlaceholderExpansion {
         return "&cInvalid params";
     }
 
+    public String returnRelation(Clan clan, Clan targetClan) {
+        return clan == null ? "" : targetClan == null || clan != targetClan ? Config.CLAN.RELATION.ENEMY : Config.CLAN.RELATION.TEAMMATE;
+    }
+
     public String returnName(Clan clan) {
-        return clan == null ? "*" : clan.getName();
+        return clan == null ? "N/a" : clan.getName();
     }
 
     public String returnBalance(Clan clan) {
