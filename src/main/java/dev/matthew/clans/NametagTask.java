@@ -29,6 +29,7 @@ public class NametagTask implements Runnable {
             Clan targetClan = ClanHandler.getByPlayer(target);
             tag = Config.LUNAR.CLAN_TAG.stream().map(string -> StringUtil.translate(string
                     .replaceAll("%relation%", clan != targetClan ? Config.CLAN.RELATION.ENEMY : Config.CLAN.RELATION.TEAMMATE)
+                    .replaceAll("%position%", String.valueOf(ClanHandler.getSortedClans().indexOf(clan)))
                     .replaceAll("%playerName%", player.getName())
                     .replaceAll("%displayName%", player.getDisplayName())
                     .replaceAll("%name%", clan.getName())

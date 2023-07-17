@@ -42,7 +42,7 @@ public class Clans extends JavaPlugin {
             getLogger().info("PlaceholderAPI found! Registering expansions.");
             new ClanExpansion().register();
         }
-        if (pluginManager.isPluginEnabled("LunarClient-API")) {
+        if (Config.LUNAR.ENABLED && pluginManager.isPluginEnabled("LunarClient-API")) {
             Bukkit.getScheduler().runTaskTimerAsynchronously(this, new NametagTask(), 20L, 20L);
         }
         new ClanExecutor("clan").register();

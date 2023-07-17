@@ -108,10 +108,12 @@ public class Config {
 
     public static class LUNAR {
 
+        @ConfigPath(path = "LUNAR.ENABLED")
+        public static boolean ENABLED = false;
         @ConfigPath(path = "LUNAR.CLAN_TAG")
         public static List<String> CLAN_TAG = Arrays.asList(
-                "%displayName%",
-                "&7[&6%name%&7]"
+                "&7[&e#%position% &7❘ %relation%%name%&7]",
+                "%displayName%"
         );
         @ConfigPath(path = "LUNAR.NO_CLAN_TAG")
         public static List<String> NO_CLAN_TAG = Arrays.asList(
